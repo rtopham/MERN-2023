@@ -2,7 +2,6 @@
 import { useEffect } from 'react'
 //React Router
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 //Redux
 import {
   useValidateResetTokenMutation,
@@ -20,7 +19,6 @@ import { checkPasswordMatch } from '../forms/form-utils/formValidation'
 
 const ResetPassword = () => {
   const { token } = useParams()
-  const { user } = useSelector((state) => state.auth)
 
   const [validateResetToken, result] = useValidateResetTokenMutation()
   const [resetPassword, resetResult] = useResetPasswordMutation()
@@ -53,8 +51,6 @@ const ResetPassword = () => {
     const { password } = values
     resetPassword({ token, password })
   }
-
-  if (user) navigate('/dashboard')
   if (isLoading) return <Spinner message='Validating Reset Token' />
   if (error || resetError) {
     return (

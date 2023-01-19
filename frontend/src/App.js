@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css'
 //Components
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
-import Spinner from './components/shared/Spinner'
 //Pages
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -22,28 +21,36 @@ import PasswordResetRequest from './pages/PasswordResetRequest'
 import PrivateRoute from './components/routing/PrivateRoute'
 import AdminRoute from './components/routing/AdminRoute'
 //Redux
-import { logout } from './store'
+import { logout, useGetLoggedInUserQuery, setUser } from './store'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchUser } from './store/thunks/fetchUser'
 //css
 import './App.css'
+import NoAuthRoute from './components/routing/NoAuthRoute'
 
 function App() {
-  const dispatch = useDispatch()
-
-  const storedUser = JSON.parse(localStorage.getItem('user'))
-
-  const { isLoading } = useSelector((state) => {
+  const { token } = useSelector((state) => {
     return state.auth
   })
 
-  useEffect(() => {
-    if (storedUser?.token) {
-      dispatch(fetchUser(storedUser.token))
-    } else dispatch(logout())
-  }, [])
+  const dispatch = useDispatch()
 
-  if (storedUser && isLoading) return <Spinner message='Loading User Data' />
+  const result = useGetLoggedInUserQuery(null, {
+    pollingInterval: 900000
+  })
+
+  const { isError, data } = result
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setUser({ token, ...data }))
+    }
+  }, [data, token, dispatch])
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(logout())
+    }
+  }, [isError, dispatch])
 
   return (
     <>
@@ -52,17 +59,39 @@ function App() {
         <Container>
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
+            <Route
+              path='/login'
+              element={
+                <NoAuthRoute redirectTo='/dashboard'>
+                  <Login />
+                </NoAuthRoute>
+              }
+            />
+            <Route
+              path='/register'
+              element={
+                <NoAuthRoute redirectTo='/dashboard'>
+                  <Register />
+                </NoAuthRoute>
+              }
+            />
             <Route
               exact
               path='/reset-password/:token'
-              element={<ResetPassword />}
+              element={
+                <NoAuthRoute redirectTo='/dashboard'>
+                  <ResetPassword />
+                </NoAuthRoute>
+              }
             />
             <Route
               exact
               path='/password-reset-request'
-              element={<PasswordResetRequest />}
+              element={
+                <NoAuthRoute redirectTo='/dashboard'>
+                  <PasswordResetRequest />
+                </NoAuthRoute>
+              }
             />
             <Route
               path='/dashboard'

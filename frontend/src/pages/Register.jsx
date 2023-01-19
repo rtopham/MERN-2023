@@ -1,10 +1,8 @@
-//React
-import { useEffect } from 'react'
 //React Router
 import { Link, useNavigate } from 'react-router-dom'
 //Redux
 import { useRegisterUserMutation, setUser } from '../store'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 //Forms
 import { useForm, useGenerateForm, registerFields } from '../forms'
 //Components
@@ -23,7 +21,6 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   }
-  const { user } = useSelector((state) => state.auth)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -33,10 +30,6 @@ const Register = () => {
   const { form, values, validateForm } = registerForm
 
   const [registerUser, { isLoading }] = useRegisterUserMutation()
-
-  useEffect(() => {
-    if (user) navigate('/dashboard')
-  }, [user, navigate])
 
   const onSubmit = (e) => {
     e.preventDefault()

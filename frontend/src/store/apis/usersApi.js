@@ -5,7 +5,7 @@ const usersApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: (process.env.BASE_URL || 'http://192.168.1.49:3000') + '/api',
     prepareHeaders: (headers, { getState }) => {
-      const token = getState().auth.user?.token
+      const token = getState().auth.token
       if (token) {
         headers.set('authorization', `Bearer ${token}`)
       }
@@ -87,7 +87,6 @@ const usersApi = createApi({
         }
       }),
       getLoggedInUser: builder.query({
-        providesTags: ['UserLogin'],
         query: () => {
           return {
             url: '/users/me',

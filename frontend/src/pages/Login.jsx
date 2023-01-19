@@ -1,10 +1,8 @@
-//React
-import { useEffect } from 'react'
 //React Router
 import { Link, useNavigate } from 'react-router-dom'
 //Redux
 import { useLoginUserMutation, setUser } from '../store'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 //Forms
 import { useForm, useGenerateForm, loginFields } from '../forms'
 //Components
@@ -16,7 +14,6 @@ import Spinner from '../components/shared/Spinner'
 import { extractErrorMessage } from '../utils/extractErrorMessage'
 
 const Login = () => {
-  const { user } = useSelector((state) => state.auth)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -28,10 +25,6 @@ const Login = () => {
   const LoginForm = useGenerateForm()
 
   const { form, values, validateForm } = loginForm
-
-  useEffect(() => {
-    if (user) navigate('/dashboard')
-  }, [user, navigate])
 
   const onSubmit = (e) => {
     e.preventDefault()

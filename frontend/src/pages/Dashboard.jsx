@@ -155,14 +155,6 @@ const Dashboard = () => {
           Delete Account
         </DeleteRecordComponent>
       </div>
-
-      {/*       <Link to='/sandbox' style={{ textDecoration: 'none' }}>
-        <div className='d-grid gap-2 mb-3'>
-          <Button variant='outline-dark'>
-            <Icon icon={SAND_BOX_ICON} /> Sand Box
-          </Button>
-        </div>
-      </Link> */}
     </Container>
   )
 }

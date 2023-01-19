@@ -1,12 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Spinner } from 'react-bootstrap'
 import { Navigate } from 'react-router-dom'
-import { useGetLoggedInUserQuery, setUser } from '../../store'
 
 const AdminRoute = ({ children, redirectTo }) => {
-  const { user, isLoading } = useSelector((state) => state.auth)
+  const { user, loading } = useSelector((state) => state.auth)
 
-  if (isLoading)
+  if (loading)
     return (
       <Spinner
         animation='border'

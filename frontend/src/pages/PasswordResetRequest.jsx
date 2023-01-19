@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import { useForm, useGenerateForm, resetRequestFields } from '../forms'
 import { Icon, USER_ICON } from '../icons'
@@ -8,9 +7,6 @@ import { toast } from 'react-toastify'
 
 import { useRequestResetTokenMutation } from '../store'
 const PasswordResetRequest = () => {
-  const { user } = useSelector((state) => state.auth)
-  const navigate = useNavigate()
-
   const [requestResetToken, { isSuccess, error, isError }] =
     useRequestResetTokenMutation()
 
@@ -24,11 +20,8 @@ const PasswordResetRequest = () => {
     const { email } = values
     e.preventDefault()
     requestResetToken(email)
+    requestForm.reset()
   }
-
-  useEffect(() => {
-    if (user) navigate('/dashboard')
-  }, [user, navigate])
 
   useEffect(() => {
     if (isSuccess) toast.success('Email Sent')

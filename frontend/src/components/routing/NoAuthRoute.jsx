@@ -1,14 +1,13 @@
 import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-const PrivateRoute = ({ children, redirectTo }) => {
+const NoAuthRoute = ({ redirectTo }) => {
   const { loading, user } = useSelector((state) => {
     return state.auth
   })
   if (loading) return null
-  if (user) return children
-
-  return <Navigate to={redirectTo} />
+  if (user) return <Navigate to={redirectTo} />
+  return null
 }
 
-export default PrivateRoute
+export default NoAuthRoute
