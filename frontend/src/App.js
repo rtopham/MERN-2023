@@ -11,21 +11,14 @@ import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 //Pages
 import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Dashboard from './pages/Dashboard'
-import Admin from './pages/Admin'
-import ResetPassword from './pages/ResetPassword'
-import PasswordResetRequest from './pages/PasswordResetRequest'
 //Routing
-import PrivateRoute from './components/routing/PrivateRoute'
-import AdminRoute from './components/routing/AdminRoute'
+import NoAuthRoutes from './components/routing/NoAuthRoutes'
+import PrivateRoutes from './components/routing/PrivateRoutes'
 //Redux
 import { logout, useGetLoggedInUserQuery, setUser } from './store'
 import { useDispatch, useSelector } from 'react-redux'
 //css
 import './App.css'
-import NoAuthRoute from './components/routing/NoAuthRoute'
 
 function App() {
   const { token } = useSelector((state) => {
@@ -35,19 +28,21 @@ function App() {
   const dispatch = useDispatch()
 
   const result = useGetLoggedInUserQuery(null, {
-    pollingInterval: 900000
+    pollingInterval: 15000
   })
 
   const { isError, data } = result
 
   useEffect(() => {
-    if (data) {
+    if (data && !isError) {
+      console.log(result)
       dispatch(setUser({ token, ...data }))
     }
   }, [data, token, dispatch])
 
   useEffect(() => {
     if (isError) {
+      console.log('Got Error')
       dispatch(logout())
     }
   }, [isError, dispatch])
@@ -58,60 +53,14 @@ function App() {
         <Header />
         <Container>
           <Routes>
+            {/*Always available routes/*/}
             <Route path='/' element={<Home />} />
-            <Route
-              path='/login'
-              element={
-                <NoAuthRoute redirectTo='/dashboard'>
-                  <Login />
-                </NoAuthRoute>
-              }
-            />
-            <Route
-              path='/register'
-              element={
-                <NoAuthRoute redirectTo='/dashboard'>
-                  <Register />
-                </NoAuthRoute>
-              }
-            />
-            <Route
-              exact
-              path='/reset-password/:token'
-              element={
-                <NoAuthRoute redirectTo='/dashboard'>
-                  <ResetPassword />
-                </NoAuthRoute>
-              }
-            />
-            <Route
-              exact
-              path='/password-reset-request'
-              element={
-                <NoAuthRoute redirectTo='/dashboard'>
-                  <PasswordResetRequest />
-                </NoAuthRoute>
-              }
-            />
-            <Route
-              path='/dashboard'
-              element={
-                <PrivateRoute redirectTo='/login'>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path='/admin'
-              element={
-                <PrivateRoute redirectTo='/login'>
-                  <AdminRoute redirectTo='/dashboard'>
-                    <Admin />
-                  </AdminRoute>
-                </PrivateRoute>
-              }
-            />
+            <Route path='*' element={null} />
           </Routes>
+          {/*NoAuthRoutes available only if not logged in*/}
+          <NoAuthRoutes />
+          {/*AuthRuotes available only with valid login (includes Admin Routes)*/}
+          <PrivateRoutes />
         </Container>
         <Footer />
       </Router>

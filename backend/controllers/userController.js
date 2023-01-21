@@ -124,7 +124,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 //Generate Token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' })
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30000' })
 }
 
 // @desc    Get All Users
