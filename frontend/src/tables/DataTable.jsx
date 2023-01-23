@@ -1,9 +1,12 @@
+import { Fragment } from 'react'
 import { Table } from 'react-bootstrap'
 
 const DataTable = (props) => {
   const { data, config, keyFn, ...rest } = props
 
   const renderedHeaders = config.map((column) => {
+    if (column.header)
+      return <Fragment key={column.label}>{column.header()}</Fragment>
     return <th key={column.label}>{column.label}</th>
   })
   const renderedRows = data.map((rowData) => {

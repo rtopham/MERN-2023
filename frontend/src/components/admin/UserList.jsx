@@ -1,7 +1,7 @@
 //Redux
 import { useFetchUsersQuery } from '../../store'
 //Components
-import DataTable from '../../tables/DataTable'
+import SortableTable from '../../tables/SortableTable'
 import Spinner from '../shared/Spinner'
 //Utils
 import { usNormal } from '../../utils/dateFormats'
@@ -16,13 +16,21 @@ const UserList = () => {
     return <div className='mt-5'>Error...{extractErrorMessage(error)}</div>
 
   const config = [
-    { label: 'User', render: (user) => user.name },
+    {
+      label: 'User',
+      render: (user) => user.name,
+      sortValue: (user) => user.name
+    },
     {
       label: 'Email',
       render: (user) => <a href={`mailto:${user.email}`}>{user.email}</a>
     },
     { label: 'Role', render: (user) => (user.isAdmin ? 'Admin' : 'User') },
-    { label: 'Joined', render: (user) => usNormal(user.createdAt) }
+    {
+      label: 'Joined',
+      render: (user) => usNormal(user.createdAt),
+      sortValue: (user) => user.createdAt
+    }
   ]
 
   const keyFn = (user) => {
@@ -31,6 +39,6 @@ const UserList = () => {
 
   if (isLoading) return <Spinner message='Loading Admin Data' />
 
-  return <DataTable striped data={data} config={config} keyFn={keyFn} />
+  return <SortableTable striped data={data} config={config} keyFn={keyFn} />
 }
 export default UserList
