@@ -25,7 +25,7 @@ function App() {
   const dispatch = useDispatch()
 
   const result = useGetLoggedInUserQuery(null, {
-    pollingInterval: 600000
+    pollingInterval: 900000
   })
 
   const { isError, data } = result
