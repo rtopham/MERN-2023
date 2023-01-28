@@ -14,6 +14,8 @@ import AppRoutes from './components/routing/AppRoutes'
 //Redux
 import { logout, useGetLoggedInUserQuery, setUser } from './store'
 import { useDispatch, useSelector } from 'react-redux'
+//Helmet
+import { HelmetProvider } from 'react-helmet-async'
 //css
 import './App.css'
 
@@ -44,13 +46,15 @@ function App() {
 
   return (
     <>
-      <Router>
-        <Header />
-        <Container>
-          <AppRoutes />
-        </Container>
-        <Footer />
-      </Router>
+      <HelmetProvider>
+        <Router>
+          <Header />
+          <Container>
+            <AppRoutes />
+          </Container>
+          <Footer />
+        </Router>
+      </HelmetProvider>
       <ToastContainer />
     </>
   )

@@ -12,6 +12,8 @@ import { Icon, SIGN_IN_ICON } from '../icons'
 import Spinner from '../components/shared/Spinner'
 //Utils
 import { extractErrorMessage } from '../utils/extractErrorMessage'
+//SEO
+import SEO from '../components/shared/SEO'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -43,6 +45,12 @@ const Login = () => {
   if (isLoading) return <Spinner />
   return (
     <>
+      <SEO
+        title='Mern 2023 | Login Page'
+        description='Login page for Mern 2023 application.'
+        type='webapp'
+        name='Singletrack Ventures'
+      />
       <Container style={{ width: '500px' }}>
         <section>
           <h1>
